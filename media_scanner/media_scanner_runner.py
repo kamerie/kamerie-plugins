@@ -1,8 +1,10 @@
-from file_observer import FileObserver
-import dispatcher
+import threading
+from kamerie import dispatcher, zmq
+
 
 class MediaScanner(threading.Thread):
     def __init__(self):
+        super(MediaScanner, self).__init__()
 
     def __enter__(self):
         self.dispatcher = dispatcher.Dispatcher()
