@@ -1,5 +1,5 @@
-from template_plugin.template import TemplatePlugin
-from kamerie.dispatcher.media_scanner import TYPE_MOVIE, TYPE_SERIES
+from kamerie.template.template import TemplatePlugin
+from kamerie.utilities.consts import TYPE_MOVIE, TYPE_SERIES
 
 
 class Plugin(TemplatePlugin):
