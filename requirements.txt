@@ -1,1 +1,0 @@
--e git@github.com:kamerie/kamerie-server.git@develop
