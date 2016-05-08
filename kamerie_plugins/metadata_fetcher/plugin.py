@@ -1,5 +1,5 @@
 from kamerie.template.template import TemplatePlugin
-from kamerie.utilities.consts import TYPE_MOVIE, TYPE_SERIES
+from kamerie_plugins.metadata_fetcher.meta_fetcher import MetaFetcher
 
 
 class Plugin(TemplatePlugin):
