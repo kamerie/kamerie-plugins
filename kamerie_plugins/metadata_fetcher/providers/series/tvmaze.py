@@ -29,11 +29,11 @@ class TVMaze(object):
                 matched_series = series_by_name
 
             else:
-                r = requests.get(SERIES_ENDPOINT % media_item.name)
+                series_res = requests.get(SERIES_ENDPOINT % media_item.name)
 
-                if r.status_code == 200:
+                if series_res.status_code == 200:
                     # for each show returned by api
-                    for result in r.json():
+                    for result in series_res.json():
                         # find by show name
                         # find by api show id
                         series_by_tvmaze_id = self.db.Series.find_one({
@@ -41,18 +41,19 @@ class TVMaze(object):
                                 'show.id': result['show']['id']
                             }}})
 
+                        ep_res = requests.get(EPISODES_ENDPOINT % result['show']['id'])
                         # if not found, append it
                         if series_by_tvmaze_id is None:
                             self._logger.info('Series not found in collection, inserting new one')
-                            if result.get('searches', None) is None:
-                                result['searches'] = []
-                            result['searches'].append(media_item.name)
 
                             inserted = self.db.Series.insert_one({
                                 'name': result['show']['name'],
                                 'sanitized_name': sanitize_name(result['show']['name']),
-                                'api_results': {'tvmaze': [result]},
-                                'main_source': 'tvmaze'
+                                'searches': [media_item.name],
+                                'results_cache': {'tvmaze': [result]},
+                                'episodes': ep_res.json(),
+                                'information': result,
+                                'information_type': 'tvmaze',
                             })
                             serieses.append(inserted)
                             matched_series = inserted

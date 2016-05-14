@@ -33,8 +33,8 @@ class MediaItem(object):
                 raise AttributeError("Couldn't find series information for %s." %
                                      path.join(path.basename(path.dirname(self.path)), basename))
 
-            self.season = matches.group(1).zfill(2)
-            self.episode = matches.group(2).zfill(2)
+            self.season = int(matches.group(1))
+            self.episode = int(matches.group(2))
 
             ep_index = basename.index(matches.group(0))
 
