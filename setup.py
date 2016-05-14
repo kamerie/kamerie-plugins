@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 from kamerie_plugins import list_plugins, get_plugin_requirements
 
-MANDATORY_LIBRARIES = ['pika', 'pymongo']
+MANDATORY_LIBRARIES = ['pika', 'pymongo', 'requests']
 
 
 def get_requirements_for_plugins():
