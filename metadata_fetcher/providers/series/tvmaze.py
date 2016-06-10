@@ -2,11 +2,14 @@ import requests
 from pprint import pformat
 from kamerie.utilities.utilities import get_logger
 from kamerie.utilities.db import db, attrs_to_db_set, query_by_id, ObjectId, sanitize_name, FIELD_SERIES_ID
+from operator import itemgetter
+from collections import defaultdict
 
 BASE_ENDPOINT = 'http://api.tvmaze.com'
 SERIES_ENDPOINT = BASE_ENDPOINT + '/search/shows?q=%s'
 EPISODES_ENDPOINT = BASE_ENDPOINT + '/shows/%s/episodes'
 SCORE_THRESHOLD = 1.0
+DEFAULT_SCORE = 0.5
 
 
 class TVMaze(object):
@@ -48,7 +51,7 @@ class TVMaze(object):
                         if series_by_tvmaze_id is None:
                             self._logger.info('Series not found in collection, inserting new one')
 
-                            inserted = self.db.Series.insert_one({
+                            attrs = {
                                 'name': result['show']['name'],
                                 'sanitized_name': sanitize_name(result['show']['name']),
                                 'searches': [media_item.name],
@@ -56,15 +59,19 @@ class TVMaze(object):
                                 'episodes': ep_res.json(),
                                 'information': result,
                                 'information_type': 'tvmaze',
-                            })
-                            serieses.append(inserted)
-                            matched_series = inserted
+                            }
+                            inserted = self.db.Series.insert_one(attrs)
+                            serieses.append(attrs)
+                            if matched_series is None:
+                                matched_series = inserted
                         else:
                             self._logger.info('Series found by TVMaze ID')
                             serieses.append(series_by_tvmaze_id)
-                            matched_series = series_by_tvmaze_id
+                            if matched_series is None:
+                                matched_series = series_by_tvmaze_id
 
-            results = [result for result in serieses if result.get('score', 1.0) >= SCORE_THRESHOLD]
+            results = [result for series in serieses if series.get('score', DEFAULT_SCORE) >= SCORE_THRESHOLD]
+            results = sorted(results, key=lambda x: x['score'] if 'score' in x else DEFAULT_SCORE, reverse=True)
 
             if matched_series is None and len(results) > 0:
                 matched_series = results[0]
@@ -80,5 +87,5 @@ class TVMaze(object):
 
                 self._logger.info('Saving result to media item')
                 self.db.Media.update_one(query_by_id(media_item), attrs_to_db_set(attrs))
-            except KeyError(e):
-                self._logger.error('Problem saving info to database:' + e.message)
+            except KeyError as e:
+                self._logger.error('Problem saving info to database: %s' % e)
