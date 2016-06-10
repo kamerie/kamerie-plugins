@@ -11,7 +11,7 @@
   "settings": {
     "opensubtitles": {
       "docs": "https://trac.opensubtitles.org/projects/opensubtitles/wiki/XMLRPC",
-      "class": "OpenSubtitles",
+      "cls": "OpenSubtitles",
       "host": "https://api.opensubtitles.org:443/xml-rpc",
       "useragent": "Arachno Sub",
       "username": "chenasraf",
@@ -20,14 +20,14 @@
     },
     "subdb": {
       "docs": "http://thesubdb.com/api/",
-      "class": "SubDB",
+      "cls": "SubDB",
       "host": "http://api.thesubdb.com/?action=",
       "actions": ["search", "download", "languages", "upload"],
       "useragent": "SubDB/1.0 (Kamerie/{version}; https://github.com/kamerie)"
     },
     "submax": {
       "docs": "http://subsmax.com/subtitles-api/",
-      "class": "SubMax",
+      "cls": "SubMax",
       "host": "http://subsmax.com/api/{limit}/{search_string}"
     }
   }

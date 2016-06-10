@@ -24,13 +24,13 @@ class Plugin(TemplatePlugin):
 
         for module, provider in providers.iteritems():
             module = '{module}.py'.format(module=module)
-            expected_class = provider.get('class', '')
+            expected_class = provider.get('cls', '')
 
             try:
                 subtitle_module = imp.load_source('providers.%s' % module, os.path.join(self.path, 'providers', module))
                 if hasattr(subtitle_module, expected_class):
                     settings = deepcopy(provider)
-                    settings.pop('class')
+                    settings.pop('cls')
                     subtitle_provider = getattr(subtitle_module, expected_class)(path=self.path, **settings)
                     if isinstance(subtitle_provider, SubtitleProvider):
                         valid_subtitles_providers.append(subtitle_provider)
