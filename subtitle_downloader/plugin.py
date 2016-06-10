@@ -1,6 +1,5 @@
 import imp
 import os
-from copy import deepcopy
 
 from kamerie.template import TemplatePlugin
 from subtitle_downloader.subtitle_provider import SubtitleProvider
@@ -29,9 +28,8 @@ class Plugin(TemplatePlugin):
             try:
                 subtitle_module = imp.load_source('providers.%s' % module, os.path.join(self.path, 'providers', module))
                 if hasattr(subtitle_module, expected_class):
-                    settings = deepcopy(provider)
-                    settings.pop('cls')
-                    subtitle_provider = getattr(subtitle_module, expected_class)(path=self.path, **settings)
+                    subtitle_provider = getattr(subtitle_module, expected_class)(plugin_details=self.__dict__,
+                                                                                 **provider)
                     if isinstance(subtitle_provider, SubtitleProvider):
                         valid_subtitles_providers.append(subtitle_provider)
                     else:

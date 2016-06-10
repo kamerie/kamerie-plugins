@@ -23,13 +23,3 @@ class PluginTest(unittest.TestCase):
 
         verified_providers = self.plugin.register_providers(providers)
         self.assertFalse(verified_providers, "invalid provider was registered")
-
-    def test_only_registered_providers_get_verified(self):
-        providers = {
-            "test_provider": {},
-            "opensubtitles": {
-                "class": "OpenSubtitles"
-            }
-        }
-        verified_providers = self.plugin.register_providers(providers)
-        self.assertEqual(1, len(verified_providers), "invalid provider registration")

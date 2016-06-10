@@ -21,7 +21,8 @@
     "subdb": {
       "docs": "http://thesubdb.com/api/",
       "cls": "SubDB",
-      "host": "http://api.thesubdb.com/?action=",
+      "host": "http://api.thesubdb.com/?action={query}",
+      "read_size": 65536,
       "actions": ["search", "download", "languages", "upload"],
       "useragent": "SubDB/1.0 (Kamerie/{version}; https://github.com/kamerie)"
     }

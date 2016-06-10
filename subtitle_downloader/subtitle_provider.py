@@ -1,11 +1,8 @@
 class SubtitleProvider(object):
-    def __init__(self, **settings):
-        mandatory = ['host', 'docs', 'class']
-        for item in mandatory:
-            if item not in settings:
-                raise NameError('%s is missing from the providers settings (package.json)')
-
-        self.__dict__.update(settings)
+    def __init__(self, host, docs, cls, plugin_details, **kwargs):
+        self.host = host
+        self.docs = docs
+        self.cls = cls
 
     def get_subtitles(self, subs):
         raise NotImplementedError('n00b')
