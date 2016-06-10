@@ -39,7 +39,7 @@ class Plugin(TemplatePlugin):
                 else:
                     self._logger.error('module {module} does not have a class called: {cls}'.
                                        format(module=module, cls=expected_class))
-            except ImportError:
+            except IOError:
                 self._logger.error('no module found: %s' % module)
 
         return valid_subtitles_providers

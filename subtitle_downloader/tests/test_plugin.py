@@ -11,4 +11,25 @@ class PluginTest(unittest.TestCase):
 
     def test_standard_initialization(self):
         message = None
-        self.plugin.on_message(message)
+        try:
+            self.plugin.on_message(message)
+        except Exception as e:
+            self.fail("Error initializing %s" % e)
+
+    def test_unregistered_providers_arent_added(self):
+        providers = {
+            "test_provider": {}
+        }
+
+        verified_providers = self.plugin.register_providers(providers)
+        self.assertFalse(verified_providers, "invalid provider was registered")
+
+    def test_only_registered_providers_get_verified(self):
+        providers = {
+            "test_provider": {},
+            "opensubtitles": {
+                "class": "OpenSubtitles"
+            }
+        }
+        verified_providers = self.plugin.register_providers(providers)
+        self.assertEqual(1, len(verified_providers), "invalid provider registration")
