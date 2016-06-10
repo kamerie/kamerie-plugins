@@ -17,7 +17,9 @@ class TVMaze(object):
 
     def fetch_metadata(self, media_item):
         self._logger.info("Fetching tvmaze info for %s" % pformat(media_item.dump_attributes()))
+
         ep = self.db.Media.find_one(query_by_id(media_item))
+        matched_series = None
         serieses = []
 
         if ep.get(FIELD_SERIES_ID, None) is None:
@@ -67,9 +69,16 @@ class TVMaze(object):
             if matched_series is None and len(results) > 0:
                 matched_series = results[0]
 
-            attrs = {
-                FIELD_SERIES_ID: query_by_id(matched_series),
-            }
+            if len(results) == 0 and matched_series is None:
+                self._logger.warn('No metadata found for %s' % ep['name'])
+                return
 
-            self._logger.info('Saving result to media item')
-            self.db.Media.update_one(query_by_id(media_item), attrs_to_db_set(attrs))
+            try:
+                attrs = {
+                    FIELD_SERIES_ID: query_by_id(matched_series)['_id'],
+                }
+
+                self._logger.info('Saving result to media item')
+                self.db.Media.update_one(query_by_id(media_item), attrs_to_db_set(attrs))
+            except KeyError(e):
+                self._logger.error('Problem saving info to database:' + e.message)

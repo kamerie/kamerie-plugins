@@ -6,7 +6,8 @@ from os import path
 import re
 
 SEASON_EP_PATTERN = r's?([0-9]+)[ex]([0-9]+)'
-CLEANUP_PATTERN = r'^\W+|\W+$'
+CLEANUP_PATTERN = r'^\W+|\W+$|((19|20)[0-9]{2})'
+PUNC_TO_SPACE_PATTERN = r'(?!\w{2,})(\.+)'
 
 
 class MediaItem(object):
@@ -27,7 +28,8 @@ class MediaItem(object):
     def get_series_info(self):
         if self.name is None or self.episode is None or self.season is None:
             basename = path.basename(self.path)
-            matches = re.compile(SEASON_EP_PATTERN, re.IGNORECASE).match(basename)
+
+            matches = re.compile(SEASON_EP_PATTERN, re.IGNORECASE).search(basename)
 
             if matches is None:
                 raise AttributeError("Couldn't find series information for %s." %
@@ -65,7 +67,10 @@ class MediaItem(object):
         }
 
     def trim_name(self, name):
-        return re.sub(CLEANUP_PATTERN, '', name)
+        name = re.sub(CLEANUP_PATTERN, '', name)
+        name = re.sub(PUNC_TO_SPACE_PATTERN, ' ', name)
+        name = name.strip()
+        return name
 
     def dump_attributes(self):
         return {
