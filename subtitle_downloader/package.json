@@ -24,11 +24,6 @@
       "host": "http://api.thesubdb.com/?action=",
       "actions": ["search", "download", "languages", "upload"],
       "useragent": "SubDB/1.0 (Kamerie/{version}; https://github.com/kamerie)"
-    },
-    "submax": {
-      "docs": "http://subsmax.com/subtitles-api/",
-      "cls": "SubMax",
-      "host": "http://subsmax.com/api/{limit}/{search_string}"
     }
   }
 }
