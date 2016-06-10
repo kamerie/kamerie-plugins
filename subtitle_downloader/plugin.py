@@ -27,7 +27,7 @@ class Plugin(TemplatePlugin):
             expected_class = provider.get('class', '')
 
             try:
-                subtitle_module = imp.load_source(module, os.path.join(self.path, module))
+                subtitle_module = imp.load_source('providers.%s' % module, os.path.join(self.path, 'providers', module))
                 if hasattr(subtitle_module, expected_class):
                     settings = deepcopy(provider)
                     settings.pop('class')
