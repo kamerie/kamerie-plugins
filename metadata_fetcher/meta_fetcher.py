@@ -1,6 +1,6 @@
 from kamerie.utilities.consts import MEDIA_TYPE, MEDIA_PATH, TYPE_SERIES, TYPE_MOVIE
 from kamerie.utilities.utilities import get_logger
-from media_item import MediaItem
+from kamerie.utilities.media_item import MediaItem
 from providers import PROVIDERS
 
 class MetaFetcher(object):
