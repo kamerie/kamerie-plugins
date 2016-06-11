@@ -7,7 +7,7 @@ from pprint import pformat
 class Plugin(TemplatePlugin):
     def on_message(self, message, received="Metadata Fetcher received: %s"):
         print received % pformat(message)
-        
+
         try:
             MetaFetcher(**message).fetch_metadata()
         except AttributeError as e:
@@ -15,4 +15,4 @@ class Plugin(TemplatePlugin):
 
 
 if __name__ == '__main__':
-    Plugin('metadata_fetcher').start()
+    Plugin('meta_fetcher').start()
